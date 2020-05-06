@@ -42,8 +42,9 @@ Notes
 // 5. Catch query error, and throw customized error
 // 6. Create  nodes from the response using a shared helper function
 // 7. Display errors if found
-// 8. Convert to Typescript
-// 9. Add README
+// 8. Add tests
+// 9. Convert to Typescript
+// 10. Add README
 
 
 */
