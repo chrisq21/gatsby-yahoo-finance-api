@@ -93,8 +93,8 @@ exports.executeQuery = async (
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      return Promise.reject(error)
+      const errorMsg = `[gatsby-yahoo-finance-api] ${query.type} request failed with message: ${response.statusText}`
+      return Promise.reject(new Error(errorMsg))
     }
 
     const data = await response.json()
