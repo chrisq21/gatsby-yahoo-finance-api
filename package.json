@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Source plugin for the Yahoo Finance API",
   "main": "index.js",
-  "keywords": ["gatsby", "gatsby-plugin"],
+  "keywords": ["gatsby", "gatsby-plugin", "finance"],
   "author": "Chris Queen <chrisqueen10@gmail.com> (https://github.com/chrisq21)",
   "license": "ISC",
   "dependencies": {
