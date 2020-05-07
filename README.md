@@ -6,7 +6,7 @@ Yahoo deprecated their API in 2012, but it has since been made available on [Rap
 
 ## Available data
 
-- Historical (and current at the time of build) pricing data and metadata for an individual stock or many stocks.
+- Historical (and at the time of build) pricing data and metadata for an individual stock or many stocks.
 - Balance sheet data for an individual stock
 - "Market Mover" data. (x number of stocks with the largest gains, losses, and most active trading at time of build).
 
