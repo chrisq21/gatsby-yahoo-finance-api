@@ -7,22 +7,22 @@ const yahooFinanceBaseHost = "apidojo-yahoo-finance-v1.p.rapidapi.com"
 // TODO Move to constants
 const queriesMap = {
   "get-historical-data": {
-    nodeType: "Stock Historical Data",
+    nodeType: "StockHistoricalData",
     slug: "stock/v2/get-historical-data",
     requiredKeys: ["period1", "period2", "symbol"],
   },
   "get-balance-sheet": {
-    nodeType: "Stock Balance Sheet",
+    nodeType: "StockBalanceSheet",
     slug: "stock/v2/get-balance-sheet",
     requiredKeys: ["symbol"],
   },
   "get-charts": {
-    nodeType: "Market Charts",
-    slug: "markets/get-charts",
+    nodeType: "MarketCharts",
+    slug: "market/get-charts",
     requiredKeys: ["region", "lang", "interval", "range"],
   },
   "get-movers": {
-    nodeType: "Market Movers",
+    nodeType: "MarketMovers",
     slug: "market/get-movers",
     requiredKeys: ["region", "lang"],
   },
@@ -51,23 +51,19 @@ const getQueryURLWithParams = (queryType, queryParams) => {
 }
 
 const executeQuery = async (key, query) => {
-  // Make sure all required data is present for that request*
-  // Setup request query string
-  // Make request
-  // Call "addNode" with response
-  // Catch errors
-
   if (!queriesMap[query.type]) {
-    console.error(
-      `[gatsby-yahoo-finance-api] ${query.type} is not a supported query.`
+    return Promise.reject(
+      new Error(
+        `[gatsby-yahoo-finance-api] ${query.type} is not a supported query.`
+      )
     )
-    return
   }
   if (!hasRequiredFields(query)) {
-    console.error(
-      `[gatsby-yahoo-finance-api] Some or all required fields are missing for ${query.type} query.`
+    return Promise.reject(
+      new Error(
+        `[gatsby-yahoo-finance-api] Some or all required fields are missing for ${query.type} query.`
+      )
     )
-    return
   }
 
   const endpoint = getQueryURLWithParams(query.type, query.params)
@@ -80,8 +76,10 @@ const executeQuery = async (key, query) => {
     })
 
     const data = await response.json()
+
+    return { ...data, queryType: query.type }
   } catch (error) {
-    console.log("Error: ", error)
+    return Promise.reject(error)
   }
 }
 
@@ -89,6 +87,7 @@ exports.sourceNodes = async (
   { actions, createNodeId, createContentDigest },
   pluginOptions
 ) => {
+  const { createNode } = actions
   const { key, queries } = pluginOptions
 
   if (!key) {
@@ -100,6 +99,22 @@ exports.sourceNodes = async (
     return
   }
 
-  // Query data
-  queries.forEach(query => executeQuery(key, query))
+  const queryPromises = queries.map(query => executeQuery(key, query))
+
+  Promise.all(queryPromises)
+    .then(queryResponses => {
+      queryResponses.forEach(response => {
+        const nodeType = queriesMap[response.queryType].nodeType
+        const nodeMeta = {
+          id: createNodeId(`${nodeType}-${response.id}`),
+          internal: {
+            type: nodeType,
+            contentDigest: createContentDigest(response),
+          },
+        }
+        const node = { ...response, ...nodeMeta }
+        createNode(node)
+      })
+    })
+    .catch(error => console.error("Error: ", error.message))
 }
