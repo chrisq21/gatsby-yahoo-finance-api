@@ -66,7 +66,7 @@ plugins: [
           params: {
             region: "US", // (Required) Options: AU | CA | FR | DE | HK | US | IT | ES | GB | IN
             lang: "en", // (Required) Options:  en | fr | de | it | es | zh
-            count: "10", // The number of quotes to display in day gainers / losers / activies
+            count: "10", // (Optional) The number of quotes to display in day gainers / losers / activies
           },
         },
         {
