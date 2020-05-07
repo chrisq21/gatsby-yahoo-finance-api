@@ -2,13 +2,13 @@
 
 Source plugin for pulling in market and individual stock data into [Gatsby][gatsby] from the unofficial [Yahoo Finance API][yahoo-finance-api] hosted by [Rapid API][rapid-api].
 
-Yahoo deprecated their API in 2012, but it has since been made available on [Rapid API][yahoo-finance-api] and provides valuable data for current and historical stock market information.
+Yahoo deprecated their API in 2012, but it has since been made available on [Rapid API][yahoo-finance-api] and still provides valuable data for current and historical stock market information.
 
 ## Available data
 
 - Historical (and current at the time of build) pricing data and metadata for an individual stock or many stocks.
 - Balance sheet data for an individual stock
-- "Market Mover" data. (x number of stocks with the biggest gains, losses, and most active at time of build).
+- "Market Mover" data. (x number of stocks with the largest gains, losses, and most active trading at time of build).
 
 This is only a small subset of the data offered by the Yahoo Finance API, so if there's something missing that you'd like to see added please open an issue or create a pull request in Github!
 
@@ -66,15 +66,17 @@ plugins: [
           params: {
             region: "US", // (Required) Options: AU | CA | FR | DE | HK | US | IT | ES | GB | IN
             lang: "en", // (Required) Options:  en | fr | de | it | es | zh
+            count: "10", // The number of quotes to display in day gainers / losers / activies
           },
         },
         {
           type: "get-charts",
           params: {
+            symbol: "TSLA", // (Required) Stock ticker/symbol
             region: "US", // (Required) Options: AU | CA | FR | DE | HK | US | IT | ES | GB | IN
             lang: "en", // (Required) Options:  en | fr | de | it | es | zh
             range: "3mo", // (Required) Options: 1d | 5d | 3mo | 6mo | 1y | 5y | max
-            range: "1d", // (Required) Options: 1d | 5d | 3mo | 6mo | 1y | 5y | max
+            interval: "1mo", // (Required) Options: 5m | 15m | 1d | 1wk | 1mo
             comparisons: "APPL,GOOG", // (Optional) Comma seperated list of stock symbols to retrieve financial data for
           },
         },
@@ -86,7 +88,30 @@ plugins: [
 
 ## How to query
 
+Once the build is done, the following node types will be available in your GraphQL queries (depending on which queries were made)
+
+- stockHistoricalData
+- stockBalanceSheet
+- marketMovers
+- marketCharts
+
 You can query generated nodes like the following:
+
+```graphql
+{
+  allStockHistoricalData {
+    edges {
+      node {
+        prices {
+          close
+          open
+          date
+        }
+      }
+    }
+  }
+}
+```
 
 [gatsby]: https://www.gatsbyjs.org/
 [yahoo-finance-api]: https://rapidapi.com/apidojo/api/yahoo-finance1/
