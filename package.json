@@ -1,9 +1,13 @@
 {
   "name": "gatsby-yahoo-finance-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Source plugin for the Yahoo Finance API",
   "main": "index.js",
-  "keywords": ["gatsby", "gatsby-plugin", "finance"],
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "finance"
+  ],
   "author": "Chris Queen <chrisqueen10@gmail.com> (https://github.com/chrisq21)",
   "license": "ISC",
   "dependencies": {
