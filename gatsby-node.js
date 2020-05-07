@@ -75,8 +75,12 @@ const executeQuery = async (key, query) => {
       },
     })
 
-    const data = await response.json()
+    if (!response.ok) {
+      const error = await response.json()
+      return Promise.reject(error)
+    }
 
+    const data = await response.json()
     return { ...data, queryType: query.type }
   } catch (error) {
     return Promise.reject(error)
