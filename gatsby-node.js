@@ -37,7 +37,7 @@ exports.sourceNodes = async (
   )
 
   /* Create nodes with the query response data once it's all retrieved */
-  Promise.all(queryPromises)
+  await Promise.all(queryPromises)
     .then(queryResponses => {
       queryResponses.forEach(response => {
         const nodeType = queriesMap[response.queryType].nodeType
