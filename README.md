@@ -47,6 +47,13 @@ plugins: [
         */
 
         {
+          type: "get-profile",
+          params: {
+            symbol: "TSLA", // (Required) Stock ticker/symbol
+            region: "US", // (Optional) Options: AU | CA | FR | DE | HK | US | IT | ES | GB | IN
+          },
+        },
+        {
           type: "get-historical-data",
           params: {
             period1: "1431010482", // (Required) Epoch timestamp
