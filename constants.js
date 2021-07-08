@@ -2,6 +2,11 @@ exports.yahooFinanceBaseURL = "https://apidojo-yahoo-finance-v1.p.rapidapi.com"
 exports.yahooFinanceAPIHost = "apidojo-yahoo-finance-v1.p.rapidapi.com"
 
 exports.queriesMap = {
+  "get-profile": {
+    nodeType: "StockProfile",
+    slug: "stock/v2/get-profile",
+    requiredKeys: ["symbol", "region"],
+  },
   "get-historical-data": {
     nodeType: "StockHistoricalData",
     slug: "stock/v2/get-historical-data",
